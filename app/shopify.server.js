@@ -33,5 +33,8 @@ const shopify = shopifyApp({
 export default shopify;
 export const apiVersion = ApiVersion.October25;
 export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
+
+// 🔥 هاذم كانوا ناقصين و كانوا يكسروا OAuth
 export const authenticate = shopify.authenticate;
+export const login = shopify.authenticate.admin;
 
