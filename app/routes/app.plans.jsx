@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { authenticate } from "../shopify.server";
 
-const PLAN_KEYS = new Set(["starter", "pro", "business"]);
+const PLAN_TO_BILLING = {
+  starter: "Starter",
+  pro: "Pro",
+  business: "Business",
+};
+const PLAN_KEYS = new Set(Object.keys(PLAN_TO_BILLING));
 
 const PLANS = [
   {
@@ -41,11 +46,12 @@ export const action = async ({ request }) => {
     return new Response("Invalid plan", { status: 400 });
   }
 
+  const billingPlan = PLAN_TO_BILLING[plan];
   const isTest =
     process.env.SHOPIFY_BILLING_TEST === "true" ||
     process.env.NODE_ENV !== "production";
 
-  return billing.request({ plan, isTest });
+  return billing.request({ plan: billingPlan, isTest });
 };
 
 export default function PlansPage() {

@@ -33,16 +33,17 @@ const shopify = shopifyApp({
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   billing: {
-    starter: {
+    Starter: {
       lineItems: [
         {
           amount: 10,
           currencyCode: "USD",
           interval: BillingInterval.Every30Days,
+          trialDays: 3,
         },
       ],
     },
-    pro: {
+    Pro: {
       lineItems: [
         {
           amount: 25,
@@ -51,7 +52,7 @@ const shopify = shopifyApp({
         },
       ],
     },
-    business: {
+    Business: {
       lineItems: [
         {
           amount: 50,
