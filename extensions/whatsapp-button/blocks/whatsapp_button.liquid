@@ -1,0 +1,69 @@
+<div class="whatsapp-button-container" style="margin: 10px 0;">
+  <a
+    class="wa-btn-link"
+    href="#"
+    target="_blank"
+    style="
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background-color: {{ block.settings.button_color }};
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: inherit;
+    "
+  >
+    <img src="{{ 'whatsapp-icon.png' | asset_url }}" width="25" height="25" style="margin-right:10px;">
+    <span>{{ block.settings.button_text }}</span>
+  </a>
+</div>
+
+<script>
+(function () {
+  function initWAButton(root) {
+    const btn = root.querySelector(".wa-btn-link");
+    if (!btn) return;
+
+    const productTitle = {{ product.title | json }};
+    const productUrl = window.location.href;
+    const phoneNumber = "{{ block.settings.phone_number }}".replace(/\s+/g, "");
+    const base = `{{ block.settings.message_template | escape }}`;
+
+    const msg = `${base}\n${productTitle}\n${productUrl}`;
+
+    // 🔥 سجل click في الـ App
+    fetch("/apps/watsell/api/clicks", { method: "POST" });
+
+    // رابط واتساب
+    btn.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`;
+  }
+
+  initWAButton(document.currentScript.closest(".whatsapp-button-container") || document);
+
+  document.addEventListener("shopify:section:load", function (event) {
+    initWAButton(event.target);
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "WhatsApp Order Button",
+  "target": "section",
+  "settings": [
+    { "type": "text", "id": "phone_number", "label": "رقم الواتساب (بالرمز الدولي)", "default": "216XXXXXXXX" },
+    { "type": "text", "id": "button_text", "label": "نص الزر", "default": "اطلب عبر واتساب" },
+    {
+      "type": "textarea",
+      "id": "message_template",
+      "label": "نص الرسالة",
+      "default": "مرحباً، أريد الاستفسار عن هذا المنتج:"
+    },
+    { "type": "color", "id": "button_color", "label": "لون الزر", "default": "#25D366" }
+  ]
+}
+{% endschema %}
+
