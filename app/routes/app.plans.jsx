@@ -47,11 +47,16 @@ export const action = async ({ request }) => {
   }
 
   const billingPlan = PLAN_TO_BILLING[plan];
+  const trialDays = plan === "starter" ? 3 : undefined;
   const isTest =
     process.env.SHOPIFY_BILLING_TEST === "true" ||
     process.env.NODE_ENV !== "production";
 
-  return billing.request({ plan: billingPlan, isTest });
+  return billing.request({
+    plan: billingPlan,
+    isTest,
+    ...(trialDays ? { trialDays } : {}),
+  });
 };
 
 export default function PlansPage() {
