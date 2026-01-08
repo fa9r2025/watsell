@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useSubmit } from "react-router";
 
 const PLANS = [
   {
@@ -28,7 +28,7 @@ const PLANS = [
 ];
 
 export default function PlansPage() {
-  const navigate = useNavigate();
+  const submit = useSubmit();
 
   return (
     <s-page heading="Plans">
@@ -51,7 +51,9 @@ export default function PlansPage() {
                 <s-paragraph>{plan.description}</s-paragraph>
                 <s-button
                   variant="primary"
-                  onClick={() => navigate(`/app/plans/choose?plan=${plan.id}`)}
+                  onClick={() =>
+                    submit({ plan: plan.id }, { method: "post", action: "/app/plans/choose" })
+                  }
                 >
                   Choose {plan.name}
                 </s-button>
@@ -64,8 +66,18 @@ export default function PlansPage() {
         {`
           .plans-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(4, minmax(200px, 1fr));
             gap: 16px;
+          }
+          @media (max-width: 1100px) {
+            .plans-grid {
+              grid-template-columns: repeat(2, minmax(200px, 1fr));
+            }
+          }
+          @media (max-width: 640px) {
+            .plans-grid {
+              grid-template-columns: 1fr;
+            }
           }
         `}
       </style>
