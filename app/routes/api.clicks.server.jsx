@@ -1,4 +1,4 @@
-import { json } from "@shopify/remix-oxygen";
+import { json } from "@remix-run/node";
 import { db } from "~/db.server";
 
 export async function action({ request }) {
