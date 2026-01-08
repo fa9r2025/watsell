@@ -1,4 +1,4 @@
-import "@shopify/shopify-app-react-router/adapters/node";
+kimport "@shopify/shopify-app-react-router/adapters/node";
 import {
   ApiVersion,
   AppDistribution,
@@ -7,11 +7,16 @@ import {
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
 
-const appUrl = process.env.HOST || process.env.SHOPIFY_APP_URL || "";
+// Railway يعطي HOST بلا https أحيانًا → نصلّحو
+const rawHost = process.env.HOST || process.env.SHOPIFY_APP_URL || "";
 
-if (!appUrl) {
+if (!rawHost) {
   throw new Error("Missing HOST env variable");
 }
+
+const appUrl = rawHost.startsWith("http")
+  ? rawHost
+  : `https://${rawHost}`;
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
@@ -34,7 +39,7 @@ export default shopify;
 export const apiVersion = ApiVersion.October25;
 export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
 
-// 🔥 هاذم كانوا ناقصين و كانوا يكسروا OAuth
+// 🔥 OAuth يحتاج هاذم
 export const authenticate = shopify.authenticate;
 export const login = shopify.authenticate.admin;
 
