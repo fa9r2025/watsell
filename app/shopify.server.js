@@ -62,6 +62,11 @@ const shopify = shopifyApp({
       ],
     },
   },
+  hooks: {
+    afterAuth: async ({ session }) => {
+      await shopify.registerWebhooks({ session });
+    },
+  },
   future: {
     expiringOfflineAccessTokens: true,
   },
