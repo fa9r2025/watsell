@@ -1,4 +1,4 @@
-kimport "@shopify/shopify-app-react-router/adapters/node";
+import "@shopify/shopify-app-react-router/adapters/node";
 import {
   ApiVersion,
   AppDistribution,
@@ -8,7 +8,7 @@ import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prism
 import prisma from "./db.server";
 
 // Railway يعطي HOST بلا https أحيانًا → نصلّحو
-const rawHost = process.env.HOST || process.env.SHOPIFY_APP_URL || "";
+const rawHost = (process.env.HOST || process.env.SHOPIFY_APP_URL || "").trim();
 
 if (!rawHost) {
   throw new Error("Missing HOST env variable");
@@ -42,4 +42,3 @@ export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
 // 🔥 OAuth يحتاج هاذم
 export const authenticate = shopify.authenticate;
 export const login = shopify.authenticate.admin;
-
