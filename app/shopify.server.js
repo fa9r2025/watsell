@@ -8,10 +8,14 @@ import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prism
 import prisma from "./db.server";
 
 // Railway يعطي HOST بلا https أحيانًا → نصلّحو
-const rawHost = (process.env.HOST || process.env.SHOPIFY_APP_URL || "").trim();
+const rawHost = (
+  process.env.SHOPIFY_APP_URL ||
+  process.env.HOST ||
+  ""
+).trim();
 
 if (!rawHost) {
-  throw new Error("Missing HOST env variable");
+  throw new Error("Missing SHOPIFY_APP_URL or HOST env variable");
 }
 
 const appUrl = rawHost.startsWith("http")
